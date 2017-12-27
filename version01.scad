@@ -1,14 +1,21 @@
 include <buttons.scad>;
+include <body.scad>;
 
 // debug = true;
 
-// button(-4,8,0, "input");
+scale([7,7,10]) {
+
+body();
+
+translate([0,0,-6])
+    body(wall=true);
+
 button(-2,8,15, "src", bsize=0.4);
 button(0,9,1, "pwr");
 
 // guide presets
-button(0,3,4, "guide", bhalign="left", bvalign="center", bdirection="ttb");
-button(0,-10,18, "netflix");
+button(0,3,4, "guide", bhalign="left", bvalign="center", bdirection="ttb", tall = true);
+button(0,-9.5,18, "netflix", wide = true);
 
 button(0,6,19, "i");
 
@@ -37,6 +44,8 @@ button( 2.5,-7,17, "b");
 // selectors?
 t = [.5, 0];
 button(t[0]+2,t[1]+.5,15, "tv", bsize=0.4);
-button(t[0]+1,t[1]+-.5,15, "cab", bsize=0.4);
-button(t[0]+3,t[1]+-.5,15, "pir", bsize=0.4);
-button(t[0]+2,t[1]+-1.5,15, "tm", bsize=0.4);
+button(t[0]+1,t[1]+-.5,15, "pir", bsize=0.4);
+//button(t[0]+3,t[1]+-.5,15, "pir", bsize=0.4);
+button(t[0]+2,t[1]+-1.5,15, "cab", bsize=0.4);
+
+}

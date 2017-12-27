@@ -1,3 +1,4 @@
+
 module button(
     x = 0, y = 0,
     index = 0,
@@ -5,7 +6,9 @@ module button(
     bsize = 0.5,
     bhalign = "center",
     bvalign = "center",
-    bdirection = "ltr"
+    bdirection = "ltr",
+    wide = false,       // netflix
+    tall = false        // guide
 ) {
     ply = [
         [[-1,0], [-1,-2], [1,0], [1,2]],                 //  0 input
@@ -55,31 +58,31 @@ module button(
         [1.2,1.2,1], [1.2,1.2,1], [1.2,1.2,1], [1.2,1.2,1], [1.2,1.2,1],
         [1.2,1.2,1], [1.2,1.2,1], [1.2,1.2,1], [1.1,1.4,1], [1.2,1.2,1]
     ];
-    
+
     // text center position, for engraving
     txtctr = [
-        [0,0,0], [0,0,0], [0,1,0], [0,1,0], [0,0,0], 
-        [0,-1,0], [0,0,0], [0,-1,0], [0,.75,0], [0,0,0], 
-        [0,0,0], [0,0,0], [-.75,0,0], [0,0,0], [.75,0,0], 
+        [0,0,0], [0,0,0], [0,1,0], [0,1,0], [0,-.25,0],
+        [0,-1,0], [0,0,0], [0,-1,0], [0,.75,0], [0,0,0],
+        [0,0,0], [0,0,0], [-.75,0,0], [0,0,0], [.75,0,0],
         [0,0,0], [0,-.75,0], [0,0,0], [0,0,0], [0,0,0]
     ];
 
     $fn = 15;
-    
+
     sx = ctrs[index][0];
     sy = ctrs[index][1];
-    
+
     cx = ctr[index][0];
     cy = ctr[index][1];
 
     translate([x, y, 0]) {
         color("silver")
             difference() {
-                linear_extrude(height=0.25) {
+                linear_extrude(height=0.5) {
                     polygon(points = ply[index]);
                 }
-                translate([txtctr[index][0],txtctr[index][1],0.15]) {
-                    scale([1,1,0.3])
+                translate([txtctr[index][0],txtctr[index][1],0.41]) {
+                    scale([1,1,0.2])
                     text(
                         text = label,
                         size = bsize,
@@ -90,24 +93,66 @@ module button(
                     );
                 }
             };
+
         color("gray")
             translate([cx,cy,-.25])
                 scale([sx,sy,1])
                     linear_extrude(height=0.25)
                         polygon(points = ply[index]);
-        color("red")
-            translate([txtctr[index][0],txtctr[index][1],-0.15-.5]) {
-                difference() {
-                    cylinder(r=0.5,h=1, center=true);
-                    cylinder(r=0.3,h=2, center=true);
+
+            if( tall == false && wide == false ) {
+                button_housing( txtctr[index][0], txtctr[index][1], -0.15-.5 );
+            } else {
+                if( tall == true ) {
+                    button_housing( txtctr[index][0], txtctr[index][1] - 1.0, -0.15-.5 );
+                    button_housing( txtctr[index][0], txtctr[index][1] + 1.5, -0.15-.5 );
+                } else {
+                    button_housing( txtctr[index][0]-1.5, txtctr[index][1], -0.15-.5 );
+                    button_housing( txtctr[index][0]+1.5, txtctr[index][1], -0.15-.5 );
                 }
             }
+
+
+        //if( wide == false && tall == false ) {
+        /*} else {
+                if( tall == true ) {
+
+                } else {
+                    color("orange") {
+                        translate([txtctr[index][0]-1.5,txtctr[index][1],-0.15-.5]) {
+                            difference() {
+                                cylinder(r=0.5,h=1, center=true);
+                                cylinder(r=0.3,h=2, center=true);
+                            }
+                        }
+
+                        translate([txtctr[index][0]+1.5,txtctr[index][1],-0.15-.5]) {
+                            difference() {
+                                cylinder(r=0.5,h=1, center=true);
+                                cylinder(r=0.3,h=2, center=true);
+                            }
+                        }
+                }
+                }
+            }
+        }*/
     }
-    
+
     // debug: marks center of button
     if( debug == true ) {
         color("black")
             translate([x, y, 0])
                 cylinder(h=0.26, r=0.05);
     }
+}
+
+module button_housing(x = 0, y = 0, z = 0) {
+    color("red")
+        translate([x,y,z]) {
+            difference() {
+                cylinder(r=0.5,h=1, center=true);
+                cylinder(r=0.3,h=2, center=true);
+            }
+        }
+
 }
