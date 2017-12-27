@@ -5,10 +5,11 @@ include <body.scad>;
 
 scale([7,7,10]) {
 
-body();
-
-translate([0,0,-6])
-    body(wall=true);
+union() {
+    body();
+    translate([10,0,0])
+        body(wall=true);
+}
 
 button(-2,8,15, "src", bsize=0.4);
 button(0,9,1, "pwr");
